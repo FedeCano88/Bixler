@@ -1,0 +1,27 @@
+/* GALERIA */
+
+.galeria {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: repeat(2, auto);
+    justify-content: center;
+    row-gap: 10px;
+    column-gap: 10px;
+    background-color: $color-background;
+
+
+    .imagenesprueba1 {
+        border: 3px solid whitesmoke;
+        border-radius: 5px;
+        padding: 10px;
+        background-color: rgba(69.8%, 13.33%, 13.33%, 0.1);
+    }
+}
+
+.pgaleria {
+    text-align: center;
+    color: black;
+    font-family: "roboto-regular";
+    font-size: 20px;
+    margin: 1%;
+}

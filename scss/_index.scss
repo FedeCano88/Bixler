@@ -1,0 +1,146 @@
+
+
+/* BODY */
+
+body {
+    background-image: url(../image/background.jpg);
+}
+
+
+/* TITULOS / SUBTITULOS / PARRAFOS / A */
+
+h1 {
+    text-align: center;
+    color: $color-red;
+    font-size: map-get($tamanio-fuente, titulo );
+    font-family: "marck";
+    margin: auto;
+    margin-bottom: 15px;
+}
+
+h2 {
+    margin: auto;
+    color: $color-red;
+    font-size: map-get($tamanio-fuente, subtitulo );
+    font-family: "roboto-bold";
+    margin-top: 15px;
+}
+
+h4 {
+    margin: 1%;
+}
+
+.pindex {
+    display: block;
+    font-weight: bold;
+    text-align: center;
+    color: black;
+    font-family: "roboto-regular";
+    font-size: map-get($tamanio-fuente, parrafos );
+    margin: 10px;
+}
+
+a {
+    text-decoration: none;
+    font-family: "anteb-medium";
+    font-size: map-get($tamanio-fuente, link );
+    color: $color-red;
+    margin: 3px;
+}
+
+/* H3 subtitulos (TARIFAS,TURNOS,GALERIA,ETC) */
+
+#referencia {
+    color: $color-red;
+    font-size: map-get($tamanio-fuente, subtitulo );
+    font-family: "roboto-regular";
+    margin-bottom: 15px;
+}
+
+.titulos {
+    text-align: center;
+    width: 500px;
+    height: 60px;
+    text-shadow: 1px 5px 5px #f9dcd6;
+}
+
+.subtitulo {
+    background-color: $color-background;
+    border-radius: 5px;
+    text-align: center;
+    height: 40px;
+    width: 300px;
+}
+
+.subtitulo2 {
+    background-color: $color-background;
+    border: 2px solid $color-red;
+    border-radius: 5px;
+    text-align: center;
+    height: 40px;
+    width: 150px;
+    margin: auto;
+    margin-top: 15px;
+}
+
+
+/* FOTO CAROUSEL */
+
+.punas {
+    margin: auto;
+    color: whitesmoke;
+    font-size: 15px;
+    font-family: "roboto-bold";
+    margin-bottom: 20px;
+}
+
+.titulocarousel {
+    margin: auto;
+    color: $color-red;
+    font-size: map-get($tamanio-fuente, carousel );
+    font-family: "roboto-bold";
+}
+
+/* INDEX OFRECEMOS SERVICOS */
+
+#ofrecemos {
+    display: grid;
+    grid-template-columns: auto;
+    justify-content: center;
+}
+
+.box-ofrecemos {
+    border: 2px double $color-red;
+    border-radius: 5px;
+    background-color: $color-background;
+    color: $color-red;
+    font-size: map-get($tamanio-fuente, parrafos );
+    font-family: "roboto-regular";
+    text-align: center;
+    padding: 2%;
+    margin: 10px;
+    width: 1200px;
+}
+
+.disenosimg {
+    float: center;
+    @include size(100px, 100px)
+}
+
+.esteticaimg {
+    float: center;
+    @include size(100px, 100px);
+}
+
+.personalimg {
+    float: center;
+    @include size(100px, 100px)
+}
+
+.parrafoindex {
+    margin-top: 10px;
+    font-size: map-get($tamanio-fuente, parrafos );
+    color: black;
+    font-size: map-get($tamanio-fuente, parrafos );
+    font-family: "roboto-regular";
+}

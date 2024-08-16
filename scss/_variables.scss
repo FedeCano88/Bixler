@@ -1,0 +1,27 @@
+
+$color-red: #b22222;
+$color-background: rgba(98.04%, 98.43%, 99.22%, 0.6);
+$color-background-nav: rgba(98.04%, 98.43%, 99.22%, 0.9);
+$color-transition-nav: rgba(98.04%, 98.43%, 99.22%);
+
+/*FUENTES*/
+
+@font-face {
+    font-family: "roboto-bold";
+    src: url("../fonts/Roboto-Bold.ttf");
+}
+
+@font-face {
+    font-family: "roboto-regular";
+    src: url("../fonts/Roboto-Regular.ttf");
+}
+
+@font-face {
+    font-family: "marck";
+    src: url("../fonts/MarckScript-Regular.ttf")
+}
+
+@font-face {
+    font-family: "anteb-medium";
+    src: url("../fonts/Anteb-Medium.ttf");
+}

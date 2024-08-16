@@ -1,0 +1,16 @@
+/* NOSOTROS */
+
+.titulonosotros {
+    color: $color-red;
+    font-weight: bold;
+}
+
+.pnosotros {
+    display: block;
+    text-align: center;
+    color: black;
+    font-family: "roboto-regular";
+    font-size: map-get($tamanio-fuente , link );
+    margin: 1%;
+}
+
