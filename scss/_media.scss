@@ -1,64 +1,85 @@
 /* MEDIA MEDIA MEDIA */
 /* MEDIA MEDIA MEDIA */
 @media (max-width: 768px) {
-    /* HEADER */
-    h1 {
-      display: none;
-    }
-    .navbar-collapse {
-      background-color: rgba(250, 251, 253, 0.9);
-    }
-    .navbar-expand-sm {
-      height: 50px;
-    }
-    /* CAROUSEL */
-    .carousel-item {
-      margin-top: 50px;
-    }
-    /* INDEX OFRECEMOS SERVICOS */
-    .box-ofrecemos {
-      width: 350px;
-    }
-    /* TARIFAS */
-    .itembox {
-      font-size: 15px;
-    }
-    .pricebox {
-      font-size: 15px;
-    }
-    .producto {
-      display: flex;
-      align-content: start;
-      margin-right: 80px;
-    }
-    /* CONTACTOS */
-    #input {
-      margin: auto;
-    }
-    .enviaconsulta {
-      margin: auto;
-    }
-    /* FORMULARIO */
-    .inputform {
-      width: 300px;
-      border-radius: 5px;
-      padding: 5px;
-    }
-    .form-label {
-      display: flex;
-      justify-content: center;
-      width: 300px;
-      margin-top: 40px;
-    }
-    .form-select {
-      width: 300px;
-    }
-    /* FOOTER */
-    .mapa {
-      width: 150px;
-      height: 150px;
-    }
-    .galeria {
-      grid-template-columns: auto;
-    }
+
+  /* HEADER */
+  h1 {
+    display: none;
   }
+
+  .navbar-collapse {
+    background-color: rgba(250, 251, 253, 0.9);
+  }
+
+  .navbar-expand-sm {
+    height: 50px;
+  }
+
+  /* CAROUSEL */
+  .carousel-item {
+    margin-top: 50px;
+  }
+
+  /* INDEX OFRECEMOS SERVICOS */
+  .box-ofrecemos {
+    width: 350px;
+  }
+
+  /* TARIFAS */
+  .itembox {
+    font-size: 15px;
+  }
+
+  .pricebox {
+    font-size: 15px;
+  }
+
+  .producto {
+    display: flex;
+    align-content: start;
+    margin-right: 80px;
+  }
+
+  /* CONTACTOS */
+  #input {
+    margin: auto;
+  }
+
+  .enviaconsulta {
+    margin: auto;
+  }
+
+  /* FORMULARIO */
+  .inputform {
+    width: 300px;
+    border-radius: 5px;
+    padding: 5px;
+  }
+
+  .form-label {
+    display: flex;
+    justify-content: center;
+    width: 300px;
+    margin-top: 40px;
+  }
+
+  .form-select {
+    width: 300px;
+  }
+
+  /* FOOTER */
+  .mapa {
+    width: 150px;
+    height: 150px;
+  }
+
+  .galeria {
+    grid-template-columns: auto;
+  }
+
+  .logowsp {
+    height: 70px;
+    width: 70px;
+    margin-bottom: 50px;
+  }
+}

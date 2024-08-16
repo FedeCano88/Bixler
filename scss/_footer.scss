@@ -57,8 +57,10 @@ footer {
     display: flex;
     justify-content: right;
     position: sticky;
-    bottom: 40px;
+    bottom: 10px;
     margin-right: 20px;
+    opacity: 0.9;
+    overflow: hidden;
     
 }
 

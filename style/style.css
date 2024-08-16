@@ -160,19 +160,16 @@ a {
 }
 
 .disenosimg {
-  float: center;
   width: 100px;
   height: 100px;
 }
 
 .esteticaimg {
-  float: center;
   width: 100px;
   height: 100px;
 }
 
 .personalimg {
-  float: center;
   width: 100px;
   height: 100px;
 }
@@ -197,7 +194,6 @@ a {
 
 .border {
   border: 2px solid #b22222;
-  padding: 40px;
   border-radius: 10px;
   background-color: rgba(250, 251, 253, 0.6);
 }
@@ -256,6 +252,11 @@ a {
   margin-top: 10px;
 }
 
+.btnenviar {
+  display: flex;
+  justify-content: center;
+}
+
 /* GALERIA */
 .galeria {
   display: grid;
@@ -285,6 +286,8 @@ a {
 .titulonosotros {
   color: #b22222;
   font-weight: bold;
+  text-decoration: underline;
+  margin-top: 20px;
 }
 
 .pnosotros {
@@ -387,8 +390,10 @@ footer ul li {
   display: flex;
   justify-content: right;
   position: sticky;
-  bottom: 40px;
+  bottom: 10px;
   margin-right: 20px;
+  opacity: 0.9;
+  overflow: hidden;
 }
 
 .copyright {
@@ -459,6 +464,11 @@ footer ul li {
   }
   .galeria {
     grid-template-columns: auto;
+  }
+  .logowsp {
+    height: 70px;
+    width: 70px;
+    margin-bottom: 50px;
   }
 }
 

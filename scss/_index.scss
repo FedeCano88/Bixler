@@ -1,5 +1,3 @@
-
-
 /* BODY */
 
 body {
@@ -12,7 +10,7 @@ body {
 h1 {
     text-align: center;
     color: $color-red;
-    font-size: map-get($tamanio-fuente, titulo );
+    font-size: map-get($tamanio-fuente, titulo);
     font-family: "marck";
     margin: auto;
     margin-bottom: 15px;
@@ -21,7 +19,7 @@ h1 {
 h2 {
     margin: auto;
     color: $color-red;
-    font-size: map-get($tamanio-fuente, subtitulo );
+    font-size: map-get($tamanio-fuente, subtitulo);
     font-family: "roboto-bold";
     margin-top: 15px;
 }
@@ -36,14 +34,14 @@ h4 {
     text-align: center;
     color: black;
     font-family: "roboto-regular";
-    font-size: map-get($tamanio-fuente, parrafos );
+    font-size: map-get($tamanio-fuente, parrafos);
     margin: 10px;
 }
 
 a {
     text-decoration: none;
     font-family: "anteb-medium";
-    font-size: map-get($tamanio-fuente, link );
+    font-size: map-get($tamanio-fuente, link);
     color: $color-red;
     margin: 3px;
 }
@@ -52,7 +50,7 @@ a {
 
 #referencia {
     color: $color-red;
-    font-size: map-get($tamanio-fuente, subtitulo );
+    font-size: map-get($tamanio-fuente, subtitulo);
     font-family: "roboto-regular";
     margin-bottom: 15px;
 }
@@ -97,7 +95,7 @@ a {
 .titulocarousel {
     margin: auto;
     color: $color-red;
-    font-size: map-get($tamanio-fuente, carousel );
+    font-size: map-get($tamanio-fuente, carousel);
     font-family: "roboto-bold";
 }
 
@@ -114,7 +112,7 @@ a {
     border-radius: 5px;
     background-color: $color-background;
     color: $color-red;
-    font-size: map-get($tamanio-fuente, parrafos );
+    font-size: map-get($tamanio-fuente, parrafos);
     font-family: "roboto-regular";
     text-align: center;
     padding: 2%;
@@ -123,24 +121,24 @@ a {
 }
 
 .disenosimg {
-    float: center;
+
     @include size(100px, 100px)
 }
 
 .esteticaimg {
-    float: center;
+
     @include size(100px, 100px);
 }
 
 .personalimg {
-    float: center;
+
     @include size(100px, 100px)
 }
 
 .parrafoindex {
     margin-top: 10px;
-    font-size: map-get($tamanio-fuente, parrafos );
+    font-size: map-get($tamanio-fuente, parrafos);
     color: black;
-    font-size: map-get($tamanio-fuente, parrafos );
+    font-size: map-get($tamanio-fuente, parrafos);
     font-family: "roboto-regular";
 }
