@@ -45,19 +45,49 @@ class Cliente {
 
 // Almacenar información del cliente en el localStorage
 function guardarClienteLocalStorage(cliente) {
-    localStorage.setItem("infoCliente", JSON.stringify(cliente));
-    console.log("Cliente guardado en localStorage:", cliente);
+    let clientes = cargarClientesLocalStorage();
+    const clienteExistenteIndex = clientes.findIndex(c => c.nombre === cliente.nombre && c.apellido === cliente.apellido);
+    
+    if (clienteExistenteIndex !== -1) {
+        clientes[clienteExistenteIndex] = cliente;
+    } else {
+        clientes.push(cliente);
+    }
+
+    localStorage.setItem("clientes", JSON.stringify(clientes));
+    console.log("Cliente guardado en localStorage:");
+    console.log(cliente);
 }
 
-// Recuperar información del cliente del localStorage
-function cargarClienteLocalStorage() {
-    let clienteData = localStorage.getItem("infoCliente");
-    if (clienteData) {
-        console.log("Cliente cargado desde localStorage:", clienteData);
-        return JSON.parse(clienteData);
+// Cargar todos los clientes del localStorage
+function cargarClientesLocalStorage() {
+    let clientesData = localStorage.getItem("clientes");
+    if (clientesData) {
+        return JSON.parse(clientesData);
     }
-    console.log("No se encontró información de cliente en localStorage.");
-    return null;
+    return [];
+}
+
+// Función para mostrar todos los clientes en la consola con detalles de sus citas
+function mostrarClientesEnConsola() {
+    const clientes = cargarClientesLocalStorage();
+    if (clientes.length === 0) {
+        console.log("No hay clientes registrados.");
+    } else {
+        clientes.forEach(cliente => {
+            const citasInfo = cliente.historialCliente.map(cita => ({
+                Nombre: cliente.nombre,
+                Apellido: cliente.apellido,
+                Teléfono: cliente.telefono,
+                Email: cliente.email,
+                Servicio: cita.servicio,
+                Precio: cita.precio,
+                Día: cita.fecha,
+                Horario: cita.hora
+            }));
+            console.table(citasInfo);
+        });
+    }
 }
 
 // Función para obtener el precio de un servicio
@@ -68,25 +98,18 @@ function obtenerPrecioServicio(servicio) {
     return precio;
 }
 
-// Función para obtener las horas ocupadas en una fecha específica
+// Función para obtener las horas ocupadas en una fecha específica por todos los clientes
 function obtenerHorasOcupadas(fecha) {
-    let clienteCargado = cargarClienteLocalStorage();
-    if (clienteCargado) {
-        const cliente = new Cliente(
-            clienteCargado.nombre,
-            clienteCargado.apellido,
-            clienteCargado.email,
-            clienteCargado.telefono
-        );
-        cliente.historialCliente = clienteCargado.historialCliente;
+    let clientes = cargarClientesLocalStorage();
+    let horasOcupadas = [];
 
+    clientes.forEach(cliente => {
         const citasEnLaFecha = cliente.historialCliente.filter(cita => cita.fecha === fecha);
-        const horasOcupadas = citasEnLaFecha.map(cita => cita.hora);
-        console.log("Horas ocupadas en la fecha seleccionada:", horasOcupadas);
-        return horasOcupadas;
-    }
-    console.log("No se encontraron horas ocupadas para la fecha:", fecha);
-    return [];
+        horasOcupadas = horasOcupadas.concat(citasEnLaFecha.map(cita => cita.hora));
+    });
+
+    console.log("Horas ocupadas en la fecha seleccionada:", horasOcupadas);
+    return horasOcupadas;
 }
 
 // Función para actualizar las opciones del horario según disponibilidad
@@ -141,24 +164,15 @@ turnosForm.addEventListener("submit", function (e) {
     }
 
     const precio = obtenerPrecioServicio(servicio);
-    let clienteCargado = cargarClienteLocalStorage();
-    let cliente;
+    let clienteCargado = cargarClientesLocalStorage().find(c => c.nombre === nombre && c.apellido === apellido);
 
-    if (clienteCargado) {
-        cliente = new Cliente(
-            clienteCargado.nombre,
-            clienteCargado.apellido,
-            clienteCargado.email,
-            clienteCargado.telefono
-        );
-        cliente.historialCliente = clienteCargado.historialCliente;
-    } else {
-        cliente = new Cliente(nombre, apellido, email, telefono);
+    if (!clienteCargado) {
+        clienteCargado = new Cliente(nombre, apellido, email, telefono);
     }
 
-    cliente.agregarCita(fecha, hora, servicio, precio, "Esperando feedback");
+    clienteCargado.agregarCita(fecha, hora, servicio, precio, "Esperando feedback");
 
-    guardarClienteLocalStorage(cliente);
+    guardarClienteLocalStorage(clienteCargado);
 
     mensajeCliente.classList.remove("d-none");
     mensajeCliente.innerHTML = "<strong>¡Cita reservada con éxito!</strong>";
@@ -173,4 +187,5 @@ turnosForm.addEventListener("submit", function (e) {
 // Cargar la información del cliente al cargar la página
 window.onload = function () {
     actualizarHorarioDisponibilidad(); // Cargar disponibilidad al cargar la página
+    mostrarClientesEnConsola(); // Mostrar clientes en consola al cargar la página
 };

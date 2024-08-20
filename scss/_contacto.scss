@@ -22,21 +22,3 @@
         width: 400px;
         margin-top: 40px;
     }
-
-
-    .boton {
-        display: flex;
-        justify-content: center;
-    }
-
-
-.btn {
-    margin-top: 20px;
-    
-
-
-    &:hover {
-        background-color: $color-red;
-        color: rgba(98.04%, 98.43%, 99.22%);
-    }
-}

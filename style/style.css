@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /*FUENTES*/
 @font-face {
   font-family: "roboto-bold";
@@ -222,39 +223,96 @@ a {
   font-size: 20px;
 }
 
-/* TURNOS */
 .pturnos {
   text-align: center;
-  color: black;
-  font-family: "roboto-regular";
-  font-size: 20px;
-  margin: 10px;
+  color: #333;
+  font-family: "Roboto", sans-serif;
+  font-size: 18px;
+  margin: 20px 0;
 }
 
+/* Estilo para el formulario de turnos */
 #formularioturnos {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: "roboto-bold";
-  background-color: rgba(250, 251, 253, 0.6);
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo para los elementos de entrada */
+.inputform {
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 15px;
+}
+
+.form-control {
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
 
 .form-select {
-  align-items: center;
-  font-family: "roboto-bold";
-  width: 400px;
-  margin-top: 10px;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 15px;
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
 
+/* Estilo para el calendario */
 .calendario {
-  align-items: center;
-  font-family: "roboto-bold";
-  margin-top: 10px;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 15px;
 }
 
-.btnenviar {
+.calendario input[type=date] {
+  width: 100%;
+  padding: 10px;
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* Estilo para el botón de envío */
+.boton {
   display: flex;
   justify-content: center;
+  width: 100%;
+}
+
+.boton button {
+  width: 100%;
+  max-width: 400px;
+  padding: 10px;
+  font-family: "Roboto", sans-serif;
+  font-size: 18px;
+  border-radius: 5px;
+  border: none;
+  background-color: #6c757d;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.boton button:hover {
+  background-color: #b22222;
+}
+
+/* Mensaje de éxito */
+#mensajeCliente {
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
 }
 
 /* GALERIA */
@@ -321,19 +379,6 @@ a {
   justify-content: center;
   width: 400px;
   margin-top: 40px;
-}
-
-.boton {
-  display: flex;
-  justify-content: center;
-}
-
-.btn {
-  margin-top: 20px;
-}
-.btn:hover {
-  background-color: #b22222;
-  color: rgb(250, 251, 253);
 }
 
 /* FOOTER */
