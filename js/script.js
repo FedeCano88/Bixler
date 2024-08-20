@@ -8,7 +8,7 @@ const infoLocal = {
     diasAbierto: ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
 };
 
-console.log(infoLocal);
+console.log("Información del local:", infoLocal);
 
 // Servicios ofrecidos
 const servicios = [
@@ -39,27 +39,33 @@ class Cliente {
             estado,
         };
         this.historialCliente.push(nuevaCita);
+        console.log("Nueva cita agregada:", nuevaCita);
     }
 }
 
 // Almacenar información del cliente en el localStorage
 function guardarClienteLocalStorage(cliente) {
     localStorage.setItem("infoCliente", JSON.stringify(cliente));
+    console.log("Cliente guardado en localStorage:", cliente);
 }
 
 // Recuperar información del cliente del localStorage
 function cargarClienteLocalStorage() {
     let clienteData = localStorage.getItem("infoCliente");
     if (clienteData) {
+        console.log("Cliente cargado desde localStorage:", clienteData);
         return JSON.parse(clienteData);
     }
+    console.log("No se encontró información de cliente en localStorage.");
     return null;
 }
 
 // Función para obtener el precio de un servicio
 function obtenerPrecioServicio(servicio) {
     const servicioSeleccionado = servicios.find(s => s.nombre === servicio);
-    return servicioSeleccionado ? servicioSeleccionado.precio : 0;
+    const precio = servicioSeleccionado ? servicioSeleccionado.precio : 0;
+    console.log("Precio obtenido para el servicio:", servicio, "es:", precio);
+    return precio;
 }
 
 // Función para obtener las horas ocupadas en una fecha específica
@@ -75,14 +81,18 @@ function obtenerHorasOcupadas(fecha) {
         cliente.historialCliente = clienteCargado.historialCliente;
 
         const citasEnLaFecha = cliente.historialCliente.filter(cita => cita.fecha === fecha);
-        return citasEnLaFecha.map(cita => cita.hora);
+        const horasOcupadas = citasEnLaFecha.map(cita => cita.hora);
+        console.log("Horas ocupadas en la fecha seleccionada:", horasOcupadas);
+        return horasOcupadas;
     }
+    console.log("No se encontraron horas ocupadas para la fecha:", fecha);
     return [];
 }
 
 // Función para actualizar las opciones del horario según disponibilidad
 function actualizarHorarioDisponibilidad() {
     const fechaSeleccionada = document.getElementById("fecha").value;
+    console.log("Fecha seleccionada para actualizar disponibilidad:", fechaSeleccionada);
     const horasOcupadas = obtenerHorasOcupadas(fechaSeleccionada);
     const horarioInput = document.getElementById("horario");
 
@@ -99,6 +109,8 @@ function actualizarHorarioDisponibilidad() {
             horarioInput.appendChild(option);
         }
     });
+
+    console.log("Opciones de horario actualizadas según la disponibilidad.");
 }
 
 // Escuchar los cambios en la fecha para actualizar las horas disponibles
@@ -118,6 +130,9 @@ turnosForm.addEventListener("submit", function (e) {
     const servicio = document.getElementById("servicio").value;
     const fecha = document.getElementById("fecha").value;
     const hora = document.getElementById("horario").value;
+
+    console.log("Formulario enviado con los siguientes datos:");
+    console.log({ nombre, apellido, telefono, email, servicio, fecha, hora });
 
     // Verificar campos vacíos
     if (!nombre || !apellido || !telefono || !email || !servicio || !fecha || !hora) {
@@ -146,7 +161,7 @@ turnosForm.addEventListener("submit", function (e) {
     guardarClienteLocalStorage(cliente);
 
     mensajeCliente.classList.remove("d-none");
-    mensajeCliente.innerText = "¡Cita reservada con éxito!";
+    mensajeCliente.innerHTML = "<strong>¡Cita reservada con éxito!</strong>";
     setTimeout(() => {
         window.location.href = "../index.html";
     }, 2000);
