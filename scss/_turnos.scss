@@ -90,3 +90,23 @@
     text-align: center;
 }
 
+/* Colores de disponibilidad */
+.verde {
+    background-color: green !important;
+    color: white;
+}
+.amarillo {
+    background-color: yellow !important;
+    color: black;
+}
+.rojo {
+    background-color: red !important;
+    color: white;
+}
+
+/* Estilo para horarios tachados */
+option.tachado {
+    text-decoration: line-through;
+    color: grey;
+}
+

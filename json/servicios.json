@@ -1,0 +1,6 @@
+[
+    { "nombre": "Gelish", "precio": 200 },
+    { "nombre": "Manicure Gelish", "precio": 300 },
+    { "nombre": "Uñas Esculpidas", "precio": 350 },
+    { "nombre": "Uñas Esculpidas + Gelish", "precio": 400 }
+]
