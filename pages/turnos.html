@@ -52,10 +52,23 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="./contacto.html">Contacto</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="./registro.html">Registrate</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="./login.html">Login</a>
+                            </li>
                         </ul>
+                        <div id="userDropdown" class="dropdown d-none">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="userMenuButton"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <span id="usuarioNombreDisplay"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="userMenuButton">
+                                <li><a class="dropdown-item" href="#" id="logoutButton">Logout</a></li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
-            </div>
         </nav>
     </header>
     <main>
@@ -70,7 +83,8 @@
                     <p class="pturnos">
                         En nuestro salón de uñas, sabemos lo valioso que es tu tiempo. Por eso, te ofrecemos un sistema
                         de turnos sencillo y eficiente. Puedes reservar tu cita fácilmente en línea, seleccionando el
-                        servicio y el horario que mejor se adapte a tu agenda. Nuestro equipo de profesionales está listo
+                        servicio y el horario que mejor se adapte a tu agenda. Nuestro equipo de profesionales está
+                        listo
                         para recibirte y brindarte la mejor atención, asegurando que tu experiencia sea relajante y sin
                         contratiempos. ¡Agenda tu turno hoy mismo y disfruta de unas uñas perfectas sin esperas!
                     </p>
@@ -97,23 +111,25 @@
                                     <select id="servicio" class="form-select" aria-label="Default select example"
                                         required>
                                         <option selected disabled>Servicios</option>
-                                        <option value="Gelish">Gelish</option>
-                                        <option value="ManicureG">Manicure Gelish</option>
-                                        <option value="UnasEsculpidas">Uñas Esculpidas</option>
-                                        <option value="UnasEsculpidasG">Uñas Esculpidas Gelish</option>
+                                        <option value="Gelish">Gelish $200</option>
+                                        <option value="Manicure Gelish">Manicure Gelish $350</option>
+                                        <option value="Uñas Esculpidas">Uñas Esculpidas $350</option>
+                                        <option value="Uñas Esculpidas + Gelish">Uñas Esculpidas + Gelish $400</option>
                                     </select>
+                                    <div id="precioServicio" class="mt-3"></div>
                                     <div class="calendario">
                                         <input id="fecha" type="date" class="form-control form-control-lg" required>
                                     </div>
                                     <div class="inputform">
-                                        <select id="horario" class="form-select" aria-label="Seleccione una hora" required>
+                                        <select id="horario" class="form-select" aria-label="Seleccione una hora"
+                                            required>
                                             <option selected disabled>Seleccione una hora</option>
                                             <!-- Las opciones se agregarán dinámicamente desde el JavaScript -->
                                         </select>
                                     </div>
                                     <div class="boton">
-                                    <button class="btn btn-outline-secondary" type="submit"
-                                        id="enviar">Enviar</button>
+                                        <button class="btn btn-outline-secondary" type="submit"
+                                            id="enviar">Enviar</button>
                                     </div>
                                     <div id="mensajeCliente" class="alert alert-success mt-3 d-none">
                                         ¡Enviado con éxito!
@@ -150,11 +166,13 @@
             alt="Logo de Whatsapp" width="70" height="70">
     </a>
     <!-- Script -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
     <!-- JavaScript -->
-    <script src="../js/script.js"></script>
+    <script src="../js/turnos.js"></script>
+    <script src="../js/auth.js"></script>
 </body>
 
 </html>

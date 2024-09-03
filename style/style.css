@@ -337,6 +337,24 @@ option.tachado {
   color: grey;
 }
 
+/* Estilos para los formularios de login y registro */
+.card-form {
+  max-width: 500px;
+  margin: 20px;
+  padding: 20px;
+  background-color: rgba(250, 251, 253, 0.6);
+  border: 1px solid #b22222;
+  border-radius: 10px;
+}
+
+/* Estilo para el input del formulario */
+.form-input {
+  border-radius: 5px;
+  border: 1px solid #b22222;
+  font-family: "roboto-regular";
+  font-size: 16px;
+}
+
 /* GALERIA */
 .galeria {
   display: grid;

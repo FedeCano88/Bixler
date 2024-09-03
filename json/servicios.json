@@ -1,6 +1,36 @@
 [
-    { "nombre": "Gelish", "precio": 200 },
-    { "nombre": "Manicure Gelish", "precio": 300 },
-    { "nombre": "Uñas Esculpidas", "precio": 350 },
-    { "nombre": "Uñas Esculpidas + Gelish", "precio": 400 }
+    {
+        "id": 1,
+        "nombre": "Gelish",
+        "precio": 200,
+        "descripcion": "Aplicación de esmalte Gelish que dura más tiempo y ofrece un acabado brillante.",
+        "duracion": 45,
+        "categoria": "Manicura"
+    },
+    {
+        "id": 2,
+        "nombre": "Manicure Gelish",
+        "precio": 300,
+        "descripcion": "Manicura completa con aplicación de Gelish.",
+        "duracion": 60,
+        "categoria": "Manicura"
+    },
+    {
+        "id": 3,
+        "nombre": "Uñas Esculpidas",
+        "precio": 350,
+        "descripcion": "Creación de uñas artificiales esculpidas para un look elegante.",
+        "duracion": 90,
+        "categoria": "Esculpido"
+    },
+    {
+        "id": 4,
+        "nombre": "Uñas Esculpidas + Gelish",
+        "precio": 400,
+        "descripcion": "Uñas esculpidas con aplicación de Gelish para un acabado duradero y brillante.",
+        "duracion": 120,
+        "categoria": "Esculpido"
+    }
 ]
+
+
