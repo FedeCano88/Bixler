@@ -1,21 +1,33 @@
 document.addEventListener("DOMContentLoaded", function() {
+    // Verificar si hay un usuario logueado almacenado en localStorage
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
     if (loggedInUser) {
         mostrarNombreUsuario(loggedInUser);
         activarDropdownUsuario(loggedInUser);
-        mostrarDashboardUsuario(loggedInUser); // Mostrar el dashboard si el usuario está logueado
+        mostrarDashboardUsuario(loggedInUser);
     }
 
     // Manejo del formulario de registro
     const registroForm = document.getElementById("registroForm");
     if (registroForm) {
-        registroForm.addEventListener("submit", function (e) {
+        registroForm.addEventListener("submit", async function (e) {
             e.preventDefault();
             const username = document.getElementById("username").value;
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
 
-            // Verificar si ya existe un usuario con el mismo email
+            // Validaciones de campos
+            if (!username || !email || !password) {
+                Swal.fire({
+                    title: "Error",
+                    text: "Todos los campos son obligatorios.",
+                    icon: "error",
+                    confirmButtonText: "Aceptar"
+                });
+                return;
+            }
+
+            // Verificar si ya existe un usuario con el mismo email en localStorage
             let users = JSON.parse(localStorage.getItem("users")) || [];
             if (users.some(u => u.email === email)) {
                 Swal.fire({
@@ -27,32 +39,51 @@ document.addEventListener("DOMContentLoaded", function() {
                 return;
             }
 
-            // Crear un objeto de usuario
-            const user = { username, email, password, orders: [] };
+            // Simular una llamada fetch a un servidor para registrar el usuario
+            try {
+                const response = await fetch('https://jsonplaceholder.typicode.com/posts', { // URL de ejemplo
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password })
+                });
 
-            users.push(user);
-            localStorage.setItem("users", JSON.stringify(users));
+                if (!response.ok) throw new Error('Error al registrar el usuario');
 
-            Swal.fire({
-                title: "Registro Exitoso",
-                text: "¡Te has registrado exitosamente!",
-                icon: "success",
-                confirmButtonText: "Aceptar"
-            }).then(() => {
-                document.getElementById("registroForm").reset();
-                window.location.href = "login.html"; // Redirige al login después de registrarse
-            });
+                // Crear un objeto de usuario y guardar en localStorage
+                const user = { username, email, password, orders: [] };
+                users.push(user);
+                localStorage.setItem("users", JSON.stringify(users));
+
+                Swal.fire({
+                    title: "Registro Exitoso",
+                    text: "¡Te has registrado exitosamente!",
+                    icon: "success",
+                    confirmButtonText: "Aceptar"
+                }).then(() => {
+                    document.getElementById("registroForm").reset();
+                    window.location.href = "./login.html"; 
+                });
+            } catch (error) {
+                Swal.fire({
+                    title: "Error",
+                    text: "Hubo un problema al registrar el usuario.",
+                    icon: "error",
+                    confirmButtonText: "Aceptar"
+                });
+                console.error("Error en el registro:", error);
+            }
         });
     }
 
     // Manejo del formulario de login
     const loginForm = document.getElementById("loginForm");
     if (loginForm) {
-        loginForm.addEventListener("submit", function (e) {
+        loginForm.addEventListener("submit", async function (e) {
             e.preventDefault();
             const email = document.getElementById("loginEmail").value;
             const password = document.getElementById("loginPassword").value;
 
+            // Validaciones de campos
             if (!email || !password) {
                 Swal.fire({
                     title: "Error",
@@ -63,29 +94,49 @@ document.addEventListener("DOMContentLoaded", function() {
                 return;
             }
 
-            let users = JSON.parse(localStorage.getItem("users")) || [];
-            const user = users.find(u => u.email === email && u.password === password);
+            // Simular una llamada fetch a un servidor para verificar el login
+            try {
+                const response = await fetch('https://jsonplaceholder.typicode.com/posts/1', { // URL de ejemplo
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
 
-            if (user) {
-                Swal.fire({
-                    title: "¡Bienvenido!",
-                    text: "Login exitoso.",
-                    icon: "success",
-                    confirmButtonText: "Aceptar"
-                }).then(() => {
+                if (!response.ok) throw new Error('Email o contraseña incorrectos');
+
+                // Validar las credenciales del usuario localmente
+                let users = JSON.parse(localStorage.getItem("users")) || [];
+                const user = users.find(u => u.email === email && u.password === password);
+
+                if (user) {
                     localStorage.setItem("loggedInUser", JSON.stringify(user));
                     mostrarNombreUsuario(user);
                     activarDropdownUsuario(user);
                     mostrarDashboardUsuario(user);
-                    window.location.href = "../index.html"; // Redirige al dashboard después de iniciar sesión
-                });
-            } else {
+
+                    Swal.fire({
+                        title: "¡Bienvenido!",
+                        text: "Login exitoso.",
+                        icon: "success",
+                        confirmButtonText: "Aceptar"
+                    }).then(() => {
+                        window.location.href = "../index.html"; 
+                    });
+                } else {
+                    Swal.fire({
+                        title: "Error",
+                        text: "Email o contraseña incorrectos.",
+                        icon: "error",
+                        confirmButtonText: "Aceptar"
+                    });
+                }
+            } catch (error) {
                 Swal.fire({
                     title: "Error",
-                    text: "Email o contraseña incorrectos.",
+                    text: "Hubo un problema al iniciar sesión.",
                     icon: "error",
                     confirmButtonText: "Aceptar"
                 });
+                console.error("Error en el login:", error);
             }
         });
     }
@@ -100,14 +151,14 @@ document.addEventListener("DOMContentLoaded", function() {
     function activarDropdownUsuario(user) {
         const userDropdown = document.getElementById("userDropdown");
         if (userDropdown) {
-            userDropdown.classList.remove("d-none"); // Mostrar el dropdown del usuario
+            userDropdown.classList.remove("d-none");
         }
 
         const logoutButton = document.getElementById("logoutButton");
         if (logoutButton) {
             logoutButton.addEventListener("click", function() {
-                localStorage.removeItem("loggedInUser"); // Elimina al usuario logueado de localStorage
-                window.location.reload(); // Recarga la página para actualizar la UI
+                localStorage.removeItem("loggedInUser");
+                window.location.reload();
             });
         }
     }
@@ -116,16 +167,16 @@ document.addEventListener("DOMContentLoaded", function() {
         const userDashboard = document.getElementById("userDashboard");
         const usernameDisplay = document.getElementById("usernameDisplay");
         if (userDashboard && usernameDisplay) {
-            userDashboard.classList.remove("d-none"); // Mostrar el dashboard
-            usernameDisplay.innerText = user.username; // Mostrar el nombre del usuario en el dashboard
-            actualizarHistorialPedidos(user.orders); // Actualiza el historial de pedidos en el dashboard
+            userDashboard.classList.remove("d-none");
+            usernameDisplay.innerText = user.username;
+            actualizarHistorialPedidos(user.orders);
         }
     }
 
     function actualizarHistorialPedidos(orders) {
         const orderHistory = document.getElementById("orderHistory");
         if (orderHistory) {
-            orderHistory.innerHTML = ''; // Limpiar el historial previo
+            orderHistory.innerHTML = '';
             orders.forEach(order => {
                 const row = document.createElement("tr");
                 row.innerHTML = `
@@ -140,6 +191,8 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 });
+
+
 
 
 
