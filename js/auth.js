@@ -12,9 +12,9 @@ document.addEventListener("DOMContentLoaded", function() {
     if (registroForm) {
         registroForm.addEventListener("submit", async function (e) {
             e.preventDefault();
-            const username = document.getElementById("username").value;
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
+            const username = document.getElementById("username")?.value || "";
+            const email = document.getElementById("email")?.value || "";
+            const password = document.getElementById("password")?.value || "";
 
             // Validaciones de campos
             if (!username || !email || !password) {
@@ -39,9 +39,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 return;
             }
 
-            // Simular una llamada fetch a un servidor para registrar el usuario
             try {
-                const response = await fetch('https://jsonplaceholder.typicode.com/posts', { // URL de ejemplo
+                const response = await fetch('https://jsonplaceholder.typicode.com/posts', { 
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, email, password })
@@ -49,7 +48,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 if (!response.ok) throw new Error('Error al registrar el usuario');
 
-                // Crear un objeto de usuario y guardar en localStorage
                 const user = { username, email, password, orders: [] };
                 users.push(user);
                 localStorage.setItem("users", JSON.stringify(users));
@@ -80,10 +78,9 @@ document.addEventListener("DOMContentLoaded", function() {
     if (loginForm) {
         loginForm.addEventListener("submit", async function (e) {
             e.preventDefault();
-            const email = document.getElementById("loginEmail").value;
-            const password = document.getElementById("loginPassword").value;
+            const email = document.getElementById("loginEmail")?.value || "";
+            const password = document.getElementById("loginPassword")?.value || "";
 
-            // Validaciones de campos
             if (!email || !password) {
                 Swal.fire({
                     title: "Error",
@@ -94,16 +91,14 @@ document.addEventListener("DOMContentLoaded", function() {
                 return;
             }
 
-            // Simular una llamada fetch a un servidor para verificar el login
             try {
-                const response = await fetch('https://jsonplaceholder.typicode.com/posts/1', { // URL de ejemplo
+                const response = await fetch('https://jsonplaceholder.typicode.com/posts/1', { 
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' }
                 });
 
                 if (!response.ok) throw new Error('Email o contraseña incorrectos');
 
-                // Validar las credenciales del usuario localmente
                 let users = JSON.parse(localStorage.getItem("users")) || [];
                 const user = users.find(u => u.email === email && u.password === password);
 
@@ -191,6 +186,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 });
+
 
 
 

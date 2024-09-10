@@ -1,5 +1,15 @@
 {
   "dependencies": {
-    "sweetalert2": "^11.12.4"
-  }
+    "sweetalert2": "11.12.4"
+  },
+  "name": "bixler-nails",
+  "version": "1.0.0",
+  "description": "Bixler Nails Studio",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Fedecano",
+  "license": "ISC"
 }

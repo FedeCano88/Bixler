@@ -7,64 +7,78 @@ async function cargarServicios() {
         if (!response.ok) {
             throw new Error('Error al cargar el archivo JSON');
         }
-        servicios = await response.json();
+        const data = await response.json();
+        if (!Array.isArray(data)) {
+            throw new Error('Los servicios no están en el formato adecuado');
+        }
+        servicios = data;
         console.log("Servicios cargados:", servicios);
         actualizarOpcionesServicios();
     } catch (error) {
         console.error("Error al cargar los servicios:", error);
+        alert("No se pudieron cargar los servicios. Inténtelo más tarde.");
     }
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    // Verifica si estamos en la página de turnos utilizando una bandera específica
-    if (window.location.pathname.includes('turnos.html')) {
-        const usuarioLogueado = JSON.parse(localStorage.getItem("loggedInUser"));
-        if (!usuarioLogueado) {
-            Swal.fire({
-                title: "Acceso Denegado",
-                text: "Debes estar registrado para reservar un turno.",
-                icon: "warning",
-                confirmButtonText: "Aceptar"
-            }).then(() => {
-                window.location.href = "../pages/login.html"; // Asegúrate de que esta ruta sea correcta.
-            });
+    try {
+        if (window.location.pathname.includes('turnos.html')) {
+            const usuarioLogueado = JSON.parse(localStorage.getItem("loggedInUser"));
+            if (!usuarioLogueado || typeof usuarioLogueado !== 'object') {
+                Swal.fire({
+                    title: "Acceso Denegado",
+                    text: "Debes estar registrado para reservar un turno.",
+                    icon: "warning",
+                    confirmButtonText: "Aceptar"
+                }).then(() => {
+                    window.location.href = "../pages/login.html";
+                });
+            }
         }
+    } catch (error) {
+        console.error("Error al verificar el usuario logueado:", error);
     }
 });
 
-// Resto del código de turnos.js aquí...
-
-
 // Actualizar las opciones del select de servicios en el formulario
 function actualizarOpcionesServicios() {
-    const selectServicio = document.getElementById("servicio");
-    selectServicio.innerHTML = '<option selected disabled>Servicios</option>';
-    servicios.forEach(servicio => {
-        const option = document.createElement("option");
-        option.value = servicio.nombre;
-        option.text = servicio.nombre;
-        selectServicio.appendChild(option);
-    });
+    try {
+        const selectServicio = document.getElementById("servicio");
+        if (!selectServicio) {
+            throw new Error("El elemento select para servicios no existe");
+        }
+        selectServicio.innerHTML = '<option selected disabled>Servicios</option>';
+        servicios.forEach(servicio => {
+            if (!servicio.nombre) {
+                console.warn("Servicio sin nombre encontrado:", servicio);
+                return;
+            }
+            const option = document.createElement("option");
+            option.value = servicio.nombre;
+            option.text = servicio.nombre;
+            selectServicio.appendChild(option);
+        });
+    } catch (error) {
+        console.error("Error al actualizar las opciones de servicios:", error);
+    }
 }
 
 // Clase para manejar la información del cliente
 class Cliente {
     constructor(nombre, apellido, email, telefono) {
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.email = email;
-        this.telefono = telefono;
+        this.nombre = nombre || "Desconocido";
+        this.apellido = apellido || "Desconocido";
+        this.email = email || "Sin correo";
+        this.telefono = telefono || "Sin teléfono";
         this.historialCliente = [];
     }
 
     agregarCita(fecha, hora, servicio, precio, estado) {
-        const nuevaCita = {
-            fecha,
-            hora,
-            servicio,
-            precio,
-            estado,
-        };
+        if (!fecha || !hora || !servicio || !precio) {
+            console.error("Datos incompletos para agregar cita");
+            return;
+        }
+        const nuevaCita = { fecha, hora, servicio, precio, estado };
         this.historialCliente.push(nuevaCita);
         console.log("Nueva cita agregada:", nuevaCita);
     }
@@ -73,6 +87,9 @@ class Cliente {
 // Almacenar información del cliente en el localStorage
 function guardarClienteLocalStorage(cliente) {
     try {
+        if (!(cliente instanceof Cliente)) {
+            throw new Error("El objeto proporcionado no es una instancia válida de Cliente");
+        }
         let clientes = cargarClientesLocalStorage();
         const clienteExistenteIndex = clientes.findIndex(c => c.nombre === cliente.nombre && c.apellido === cliente.apellido);
 
@@ -83,8 +100,7 @@ function guardarClienteLocalStorage(cliente) {
         }
 
         localStorage.setItem("clientes", JSON.stringify(clientes));
-        console.log("Cliente guardado en localStorage:");
-        console.log(cliente);
+        console.log("Cliente guardado en localStorage:", cliente);
     } catch (error) {
         console.error("Error al guardar en localStorage:", error);
         alert("Hubo un problema al guardar la información. Por favor, inténtalo de nuevo.");
@@ -95,16 +111,16 @@ function guardarClienteLocalStorage(cliente) {
 function cargarClientesLocalStorage() {
     try {
         let clientesData = localStorage.getItem("clientes");
-        if (clientesData) {
-            let clientes = JSON.parse(clientesData);
-            // Convertir cada objeto a una instancia de Cliente
-            return clientes.map(cliente => {
-                const nuevoCliente = new Cliente(cliente.nombre, cliente.apellido, cliente.email, cliente.telefono);
-                nuevoCliente.historialCliente = cliente.historialCliente || [];
-                return nuevoCliente;
-            });
+        if (!clientesData) return [];
+        let clientes = JSON.parse(clientesData);
+        if (!Array.isArray(clientes)) {
+            throw new Error("Los clientes en localStorage no tienen el formato adecuado");
         }
-        return [];
+        return clientes.map(cliente => {
+            const nuevoCliente = new Cliente(cliente.nombre, cliente.apellido, cliente.email, cliente.telefono);
+            nuevoCliente.historialCliente = cliente.historialCliente || [];
+            return nuevoCliente;
+        });
     } catch (error) {
         console.error("Error al cargar clientes de localStorage:", error);
         return [];
@@ -113,46 +129,64 @@ function cargarClientesLocalStorage() {
 
 // Función para mostrar todos los clientes en la consola con detalles de sus citas
 function mostrarClientesEnConsola() {
-    const clientes = cargarClientesLocalStorage();
-    if (clientes.length === 0) {
-        console.log("No hay clientes registrados.");
-    } else {
-        clientes.forEach(cliente => {
-            const citasInfo = cliente.historialCliente.map(cita => ({
-                Nombre: cliente.nombre,
-                Apellido: cliente.apellido,
-                Teléfono: cliente.telefono,
-                Email: cliente.email,
-                Servicio: cita.servicio,
-                Precio: cita.precio,
-                Día: cita.fecha,
-                Horario: cita.hora
-            }));
-            console.table(citasInfo);
-        });
+    try {
+        const clientes = cargarClientesLocalStorage();
+        if (clientes.length === 0) {
+            console.log("No hay clientes registrados.");
+        } else {
+            clientes.forEach(cliente => {
+                const citasInfo = cliente.historialCliente.map(cita => ({
+                    Nombre: cliente.nombre,
+                    Apellido: cliente.apellido,
+                    Teléfono: cliente.telefono,
+                    Email: cliente.email,
+                    Servicio: cita.servicio,
+                    Precio: cita.precio,
+                    Día: cita.fecha,
+                    Horario: cita.hora
+                }));
+                console.table(citasInfo);
+            });
+        }
+    } catch (error) {
+        console.error("Error al mostrar los clientes en la consola:", error);
     }
 }
 
 // Función para obtener el precio de un servicio
 function obtenerPrecioServicio(servicio) {
-    const servicioSeleccionado = servicios.find(s => s.nombre === servicio);
-    const precio = servicioSeleccionado ? servicioSeleccionado.precio : 0;
-    console.log("Precio obtenido para el servicio:", servicio, "es:", precio);
-    return precio;
+    try {
+        if (!servicio) {
+            console.error("El servicio proporcionado no es válido");
+            return 0;
+        }
+        const servicioSeleccionado = servicios.find(s => s.nombre === servicio);
+        const precio = servicioSeleccionado ? servicioSeleccionado.precio : 0;
+        console.log("Precio obtenido para el servicio:", servicio, "es:", precio);
+        return precio;
+    } catch (error) {
+        console.error("Error al obtener el precio del servicio:", error);
+        return 0;
+    }
 }
 
 // Función para obtener las horas ocupadas en una fecha específica por todos los clientes
 function obtenerHorasOcupadas(fecha) {
-    let clientes = cargarClientesLocalStorage();
-    let horasOcupadas = [];
+    try {
+        let clientes = cargarClientesLocalStorage();
+        let horasOcupadas = [];
 
-    clientes.forEach(cliente => {
-        const citasEnLaFecha = cliente.historialCliente.filter(cita => cita.fecha === fecha);
-        horasOcupadas = horasOcupadas.concat(citasEnLaFecha.map(cita => cita.hora));
-    });
+        clientes.forEach(cliente => {
+            const citasEnLaFecha = cliente.historialCliente.filter(cita => cita.fecha === fecha);
+            horasOcupadas = horasOcupadas.concat(citasEnLaFecha.map(cita => cita.hora));
+        });
 
-    console.log("Horas ocupadas en la fecha seleccionada:", horasOcupadas);
-    return horasOcupadas;
+        console.log("Horas ocupadas en la fecha seleccionada:", horasOcupadas);
+        return horasOcupadas;
+    } catch (error) {
+        console.error("Error al obtener las horas ocupadas:", error);
+        return [];
+    }
 }
 
 // Función para deshabilitar los domingos en el calendario
@@ -161,19 +195,19 @@ function deshabilitarDomingos() {
 
     inputFecha.addEventListener("input", function () {
         if (this.value) {
-            const selectedDate = new Date(this.value + 'T00:00:00'); // Asegura que la fecha se interprete correctamente
-            const selectedDay = selectedDate.getDay(); // 0 para Domingo, 1 para Lunes, ..., 6 para Sábado
+            const selectedDate = new Date(this.value + 'T00:00:00');
+            const selectedDay = selectedDate.getDay();
 
             console.log("Día seleccionado (0 para domingo, 1 para lunes, etc.):", selectedDay);
 
-            if (selectedDay === 0) { // Si es domingo
+            if (selectedDay === 0) {
                 Swal.fire({
                     title: "Reserva no disponible",
                     text: "No se pueden reservar turnos los domingos. Por favor, elige otro día.",
                     icon: "warning",
                     confirmButtonText: "Aceptar"
                 });
-                this.value = ''; // Limpia la fecha seleccionada si es domingo
+                this.value = '';
             }
         }
     });
@@ -198,35 +232,44 @@ function colorearDiasDisponibilidad() {
 
 // Función para obtener la disponibilidad de horas
 function obtenerHorasDisponibles(fecha) {
-    const horasTotales = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
-    const horasOcupadas = obtenerHorasOcupadas(fecha);
-    return horasTotales.filter(hora => !horasOcupadas.includes(hora));
+    try {
+        const horasTotales = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
+        const horasOcupadas = obtenerHorasOcupadas(fecha);
+        return horasTotales.filter(hora => !horasOcupadas.includes(hora));
+    } catch (error) {
+        console.error("Error al obtener horas disponibles:", error);
+        return [];
+    }
 }
 
 // Función para actualizar los horarios tachados
 function actualizarHorarioDisponibilidad() {
-    const fechaSeleccionada = document.getElementById("fecha").value;
-    const horasOcupadas = obtenerHorasOcupadas(fechaSeleccionada);
-    const horarioInput = document.getElementById("horario");
+    try {
+        const fechaSeleccionada = document.getElementById("fecha").value;
+        const horasOcupadas = obtenerHorasOcupadas(fechaSeleccionada);
+        const horarioInput = document.getElementById("horario");
 
-    const opcionesHorario = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
+        const opcionesHorario = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
 
-    horarioInput.innerHTML = "";
+        horarioInput.innerHTML = "";
 
-    opcionesHorario.forEach(hora => {
-        const option = document.createElement("option");
-        option.value = hora;
-        option.text = hora;
+        opcionesHorario.forEach(hora => {
+            const option = document.createElement("option");
+            option.value = hora;
+            option.text = hora;
 
-        if (horasOcupadas.includes(hora)) {
-            option.classList.add("tachado");
-            option.disabled = true;
-        }
+            if (horasOcupadas.includes(hora)) {
+                option.classList.add("tachado");
+                option.disabled = true;
+            }
 
-        horarioInput.appendChild(option);
-    });
+            horarioInput.appendChild(option);
+        });
 
-    console.log("Opciones de horario actualizadas según la disponibilidad.");
+        console.log("Opciones de horario actualizadas según la disponibilidad.");
+    } catch (error) {
+        console.error("Error al actualizar la disponibilidad de horarios:", error);
+    }
 }
 
 // Escuchar los cambios en la fecha para actualizar las horas disponibles y colores de día
@@ -239,7 +282,7 @@ document.getElementById("fecha").addEventListener("change", function () {
 const turnosForm = document.getElementById("turnosForm");
 
 turnosForm.addEventListener("submit", function (e) {
-    e.preventDefault(); // Evita que el formulario se envíe de forma predeterminada
+    e.preventDefault();
 
     try {
         const nombre = document.getElementById("nombre").value;
@@ -250,17 +293,14 @@ turnosForm.addEventListener("submit", function (e) {
         const fecha = document.getElementById("fecha").value;
         const hora = document.getElementById("horario").value;
 
-        console.log("Formulario enviado con los siguientes datos:");
-        console.log({ nombre, apellido, telefono, email, servicio, fecha, hora });
+        console.log("Formulario enviado con los siguientes datos:", { nombre, apellido, telefono, email, servicio, fecha, hora });
 
-        // Verificar si la fecha seleccionada es domingo
-        const fechaSeleccionada = new Date(fecha + 'T00:00:00'); // Asegura que la fecha se interprete correctamente
+        const fechaSeleccionada = new Date(fecha + 'T00:00:00');
         if (fechaSeleccionada.getDay() === 0) {
             alert("No se pueden reservar turnos los domingos. Por favor, elige otro día.");
             return;
         }
 
-        // Verificar campos vacíos
         if (!nombre || !apellido || !telefono || !email || !servicio || !fecha || !hora) {
             alert("Por favor, completa todos los campos.");
             return;
@@ -272,7 +312,6 @@ turnosForm.addEventListener("submit", function (e) {
         if (!clienteCargado) {
             clienteCargado = new Cliente(nombre, apellido, email, telefono);
         } else {
-            // Si el cliente ya existe, convertirlo en una instancia de Cliente
             clienteCargado = new Cliente(clienteCargado.nombre, clienteCargado.apellido, clienteCargado.email, clienteCargado.telefono);
             clienteCargado.historialCliente = clienteCargado.historialCliente || [];
         }
@@ -281,7 +320,6 @@ turnosForm.addEventListener("submit", function (e) {
 
         guardarClienteLocalStorage(clienteCargado);
 
-        // También guardar la reserva en el usuario logueado si corresponde
         const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
         if (loggedInUser) {
             const users = JSON.parse(localStorage.getItem("users")) || [];
@@ -295,7 +333,6 @@ turnosForm.addEventListener("submit", function (e) {
             }
         }
 
-        // Mostrar alerta de éxito con SweetAlert2
         Swal.fire({
             title: "¡Cita reservada con éxito!",
             text: "Nos pondremos en contacto contigo pronto.",
@@ -313,14 +350,18 @@ turnosForm.addEventListener("submit", function (e) {
     }
 });
 
-
 // Cargar la información del cliente al cargar la página
 window.onload = function () {
-    cargarServicios(); // Cargar servicios desde JSON
-    deshabilitarDomingos(); // Deshabilitar domingos al cargar la página
-    actualizarHorarioDisponibilidad(); // Cargar disponibilidad al cargar la página
-    mostrarClientesEnConsola(); // Mostrar clientes en consola al cargar la página
+    try {
+        cargarServicios();
+        deshabilitarDomingos();
+        actualizarHorarioDisponibilidad();
+        mostrarClientesEnConsola();
+    } catch (error) {
+        console.error("Error al cargar la página:", error);
+    }
 };
+
 
 
 
